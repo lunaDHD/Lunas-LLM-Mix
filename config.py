@@ -12,7 +12,7 @@ NUM_LAYERS = 1
 VOCAB_SIZE = 20000  # Limits parameters in model.
 
 # Training
-EPOCHS = 25
+EPOCHS = 1
 
 # Inference
 NUM_TOKENS_TO_GENERATE = 80
