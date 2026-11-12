@@ -3,14 +3,19 @@ import os
 os.environ["KERAS_BACKEND"] = "tensorflow"  # Or "torch" or "tensorflow"
 os.environ["TF_ENABLE_ONEDNN_OPTS"] = "0"
 
+from models.TokenAndPositionEmbedding import TokenAndPositionEmbedding
+from models.PregeneratedEmbedding import PregeneratedEmbedding
+from models.TransformerBlock import TransformerBlock
 from datasets.simplebooks import vocab
-from models.BaseGPT import CompileBaseGPT
 from models.TextGenerator import getGenCallback, genTokens
+import keras
 
 def main():
-    model = CompileBaseGPT(MAX_STRING_LEN, VOCAB_SIZE, EMBED_DIM, NUM_HEADS, NUM_LAYERS, FEED_FORWARD_DIM, "adam")
+    model = keras.saving.load_model("./exports/V0.1.keras")
     model.summary()
-    genTokens(vocab, model, MAX_STRING_LEN, "Hi")
+    while True:
+        startTokens = input("> ")
+        genTokens(vocab, model, MAX_STRING_LEN, startTokens)
 
 if __name__ == "__main__":
     main()

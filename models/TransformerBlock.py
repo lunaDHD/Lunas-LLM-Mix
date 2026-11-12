@@ -1,9 +1,10 @@
 import keras
 from keras import layers
 
+@keras.saving.register_keras_serializable()
 class TransformerBlock(layers.Layer):
-    def __init__(self, embed_dim, num_heads, ff_dim, rate=0.1):
-        super().__init__()
+    def __init__(self, embed_dim, num_heads, ff_dim, rate=0.1, trainable=True, dtype=None):
+        super().__init__(trainable=trainable, dtype=dtype)
         self.att = layers.MultiHeadAttention(num_heads, embed_dim)
         self.ffn = keras.Sequential(
             [
