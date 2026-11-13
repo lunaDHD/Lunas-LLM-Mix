@@ -3,6 +3,7 @@ import os
 os.environ["KERAS_BACKEND"] = "tensorflow"  # Or "torch" or "tensorflow"
 os.environ["TF_ENABLE_ONEDNN_OPTS"] = "0"
 
+IS_EMBED = False
 from models.TokenAndPositionEmbedding import TokenAndPositionEmbedding
 from models.PregeneratedEmbedding import PregeneratedEmbedding
 from models.TransformerBlock import TransformerBlock

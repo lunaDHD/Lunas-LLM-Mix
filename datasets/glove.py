@@ -1,13 +1,10 @@
 import numpy as np
+from datasets.simplebooks import vocab
+from config import EMBED_DIM
 
-path_to_glove_file = "./datasets/Glove/glove.6B.50d.txt"
+path_to_glove_file = f"./datasets/Glove/glove.6B.{EMBED_DIM}d.txt"
 
-voc = []
-with open("./datasets/VectorizerVocab/vocab.txt", "r") as f:
-    for line in f.readlines():
-        voc.append(line.strip().replace("_",""))
-voc.append("\n")
-word_index = dict(zip(voc, range(len(voc))))
+word_index = dict(zip(vocab, range(len(vocab))))
 
 embeddings_index = {}
 with open(path_to_glove_file, encoding='utf-8') as f:
@@ -18,8 +15,8 @@ with open(path_to_glove_file, encoding='utf-8') as f:
 
 print("Found %s word vectors." % len(embeddings_index))
 
-num_tokens = len(voc) + 2
-embedding_dim = 50
+num_tokens = len(vocab) + 1
+embedding_dim = EMBED_DIM
 hits = 0
 misses = 0
 

@@ -6,7 +6,6 @@ from keras.layers import TextVectorization
 import tensorflow
 import tensorflow._api.v2.data as tf_data
 import tensorflow._api.v2.strings as tf_strings
-from datasets.glove import voc
 
 # The dataset contains each review in a separate text file
 # The text files are present in four different folders
@@ -42,8 +41,8 @@ vectorize_layer = TextVectorization(
     max_tokens=VOCAB_SIZE - 1,
     output_mode="int",
     output_sequence_length=MAX_STRING_LEN + 1,
-    vocabulary=voc
 )
+vectorize_layer.adapt(text_ds)
 vocab = vectorize_layer.get_vocabulary()  # To get words back from token indices
 
 
@@ -56,7 +55,11 @@ def prepare_lm_inputs_labels(text):
     text = tensorflow.expand_dims(text, -1)
     tokenized_sentences = vectorize_layer(text)
     x = tokenized_sentences[:, :-1]
-    y = tokenized_sentences[:, 1:]
+    y = None
+    if IS_EMBED:
+        y = tokenized_sentences[:, :-1]
+    else:
+        y = tokenized_sentences[:, 1:]
     return x, y
 
 

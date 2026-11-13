@@ -109,3 +109,38 @@ def genTokens(vocab, model, MAX_TOKENS, string):
         [vocab[_] for _ in start_tokens + tokens_generated]
     )
     print(f"generated text:\n{txt}\n")
+
+def embed_test(vocab, model, MAX_TOKENS, string):
+    def sample_from(logits):
+        logits, indices = ops.top_k(logits, k=10, sorted=True)
+        indices = np.asarray(indices).astype("int32")
+        preds = keras.activations.softmax(ops.expand_dims(logits, 0))[0]
+        preds = np.asarray(preds).astype("float32")
+        return np.random.choice(indices, p=preds)
+
+    word_to_index = {}
+    for index, word in enumerate(vocab):
+        word_to_index[word] = index
+    
+    start_tokens = [word_to_index.get(_, 1) for _ in string.split()]
+    start_tokens = [_ for _ in start_tokens]
+    num_tokens_generated = 0
+    tokens_generated = []
+    pad_len = MAX_STRING_LEN - len(start_tokens)
+    sample_index = len(start_tokens) - 1
+    if pad_len < 0:
+        x = start_tokens[-MAX_STRING_LEN:]
+        sample_index = MAX_STRING_LEN - 1
+    elif pad_len > 0:
+        x = start_tokens + [0] * pad_len
+    else:
+        x = start_tokens
+    x = np.array([x])
+    y, _ = model.predict(x, verbose=0)
+    for i in range(0, len(y)):
+        sample_token = sample_from(y[0][sample_index])
+        tokens_generated.append(sample_token)
+    txt = " ".join(
+        [vocab[_] for _ in start_tokens + tokens_generated]
+    )
+    print(f"generated text:\n{txt}\n")

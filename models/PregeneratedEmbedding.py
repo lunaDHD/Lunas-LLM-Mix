@@ -3,7 +3,6 @@ from keras import ops
 import keras
 from datasets.glove import embedding_matrix
 
-layers.Layer()
 @keras.saving.register_keras_serializable()
 class PregeneratedEmbedding(layers.Layer):
     def __init__(self, maxlen, vocab_size, embed_dim, trainable=True, dtype=None):
